@@ -104,8 +104,10 @@ class DAT(nn.Module):
                  ns_per_pts=[4, 4, 4, 4],
                  use_dwc_mlps=[False, False, False, False],
                  use_conv_patches=False,
+                 conditional=False,
                  **kwargs):
         super().__init__()
+        self.conditional = conditional
 
         self.patch_proj = nn.Sequential(
             nn.Conv2d(3, dim_stem, 7, patch_size, 3),
@@ -207,6 +209,8 @@ class DAT(nn.Module):
         return {'relative_position_bias_table', 'rpe_table'}
     
     def forward(self, x):
+        if isinstance(x, list):
+            x, query_vector = x
         
         x = self.patch_proj(x)
         positions = []

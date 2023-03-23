@@ -18,6 +18,7 @@ from timm.data import Mixup
 from timm.data import create_transform
 from timm.data.transforms import _str_to_pil_interpolation
 
+from .dataset import ConditionalDataset
 from .samplers import SubsetRandomSampler
 from torch.utils.data import DataLoader
     
@@ -70,8 +71,12 @@ def build_dataset(is_train, config):
     if config.DATA.DATASET == 'imagenet':
         prefix = 'train' if is_train else 'val'
         root = os.path.join(config.DATA.DATA_PATH, prefix)
-        dataset = datasets.ImageFolder(root, transform=transform)
-        nb_classes = 1000
+        if config.CONDITIONAL_MODE:
+            dataset = ConditionalDataset(root, transform=transform, n_classes=1000)
+            nb_classes = 2
+        else:
+            dataset = datasets.ImageFolder(root, transform=transform)
+            nb_classes = 1000
     else:
         raise NotImplementedError("We only support ImageNet Now.")
 

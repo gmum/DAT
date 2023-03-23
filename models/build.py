@@ -14,7 +14,7 @@ def build_model(config):
 
     model_type = config.MODEL.TYPE
     if model_type == 'dat':
-        model = DAT(**config.MODEL.DAT)
+        model = DAT(**config.MODEL.DAT, conditional=config.CONDITIONAL_MODE)
     else:
         raise NotImplementedError(f"Unkown model: {model_type}")
 

@@ -141,6 +141,8 @@ _C.EVAL_MODE = False
 # local rank for DistributedDataParallel, given by command line argument
 _C.LOCAL_RANK = 0
 
+# "Conditional mode" - train for binary classification if an object belongs to a class
+_C.CONDITIONAL_MODE = False
 
 def _update_config_from_file(config, cfg_file):
     config.defrost()

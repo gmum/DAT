@@ -186,7 +186,11 @@ def train_one_epoch(config, model, criterion, data_loader, optimizer, epoch, mix
     for idx, (samples, targets) in enumerate(data_loader):
         
         optimizer.zero_grad()
-        samples = samples.cuda(non_blocking=True)
+
+        if isinstance(samples, list):
+            samples = [s.cuda(non_blocking=True) for s in samples]
+        else:
+            samples = samples.cuda(non_blocking=True)
         targets = targets.cuda(non_blocking=True)
 
         if mixup_fn is not None:
@@ -251,7 +255,10 @@ def validate(config, data_loader, model, logger):
 
     end = time.time()
     for idx, (images, target) in enumerate(data_loader):
-        images = images.cuda(non_blocking=True)
+        if isinstance(images, list):
+            images = [i.cuda(non_blocking=True) for i in images]
+        else:
+            images = images.cuda(non_blocking=True)
         target = target.cuda(non_blocking=True)
 
         # compute output

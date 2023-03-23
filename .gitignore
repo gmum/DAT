@@ -108,3 +108,8 @@ output/
 clean_ckp.py
 
 *.pth
+
+# pycharm files
+.idea
+
+env.sh
