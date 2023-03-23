@@ -194,8 +194,11 @@ def train_one_epoch(config, model, criterion, data_loader, optimizer, epoch, mix
         targets = targets.cuda(non_blocking=True)
 
         if mixup_fn is not None:
-            samples, targets = mixup_fn(samples, targets)
-        
+            if isinstance(samples, list):
+                samples[0], targets = mixup_fn(samples[0], targets)
+            else:
+                samples, targets = mixup_fn(samples, targets)
+
         if config.AMP: 
             with autocast():
                 outputs, _, _ = model(samples)
